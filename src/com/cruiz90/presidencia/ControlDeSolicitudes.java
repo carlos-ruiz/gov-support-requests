@@ -1,11 +1,7 @@
 package com.cruiz90.presidencia;
 
-import com.cruiz90.presidencia.database.models.Application;
-import com.cruiz90.presidencia.database.models.SocialProgram;
 import com.cruiz90.presidencia.database.models.Town;
-import com.cruiz90.presidencia.database.models.User;
-import java.sql.Date;
-import java.util.List;
+import com.cruiz90.presidencia.interfaces.MainView;
 
 /**
  *
@@ -18,28 +14,14 @@ public class ControlDeSolicitudes {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        User user = new User("Carlos", "cruiz", "gforce");
-//        user.save();
-        List<User> users = User.getAllUsers();
-        System.out.println("Numero de usuarios: " + users.size());
-
-        Town town = new Town("Tecacho");
-        town.save();
-
-        SocialProgram sp = new SocialProgram("Piso firme");
-        sp.save();
-
-        Application app = new Application("Cemento", 10, "Ramon Corona", null, new Date(new java.util.Date().getTime()), town, sp);
-        app.save();
-
-        List<Town> towns = Town.getAll();
-        System.out.println("Numero de towns: " + towns.size());
-
-        List<SocialProgram> sps = SocialProgram.getAll();
-        System.out.println("Numero de sp: " + sps.size());
-
-        List<Application> apps = Application.getAll();
-        System.out.println("Numero de applications: " + apps.size());
+        String[] towns = {"San Angel", "El Puente", "Huaniqueo", "Santa Fe", "La Presa", "Santiago", "La Puerta", "El Cerrito", "El 20", "Jaripitiro", "Las Piedras", "Huapeo", "Manza", "Ojo de Agua", "Tacupillo", "Tecacho", "San Pedro Puruatiro", "Tendeparacua", "Coeperio", "Jesús María"};
+        Town.deleteAll();
+        for (String name : towns) {
+            Town town = new Town(name);
+            town.save();
+        }
+        MainView main = new MainView();
+        main.setVisible(true);
     }
 
 }

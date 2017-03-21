@@ -128,6 +128,32 @@ public class Town {
         return result;
     }
 
+    public static void deleteAll() {
+        Connection conn = new Util().getDatabaseConnection();
+        List<Town> result = null;
+        if (conn != null) {
+            Statement ps = null;
+            try {
+                String query = "DELETE FROM towns";
+                ps = conn.createStatement();
+                ps.execute(query);
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
     public static Town findById(Integer id) {
         Connection conn = new Util().getDatabaseConnection();
         Town town = null;
