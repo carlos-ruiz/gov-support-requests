@@ -216,4 +216,47 @@ public class Application {
         return result;
     }
 
+    public static List<Application> findByTownAndSocialProgram(Integer townId, Integer socialProgramId) {
+        Connection conn = new Util().getDatabaseConnection();
+        List<Application> result = null;
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "SELECT * FROM applications WHERE town_id=? AND social_program_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(townId, 1);
+                ps.setInt(socialProgramId, 2);
+                ResultSet rs = ps.executeQuery();
+                result = new ArrayList<>();
+                while (rs.next()) {
+                    Application sp = new Application();
+                    sp.setApplicatinId(rs.getInt("application_id"));
+                    sp.setProduct(rs.getString("product"));
+                    sp.setApplicatinId(rs.getInt("quantity"));
+                    sp.setBeneficiary(rs.getString("beneficiary"));
+                    sp.setDescription(rs.getString("description"));
+                    sp.setDate(rs.getDate("date"));
+                    sp.setTown(Town.findById(rs.getInt("town_id")));
+                    sp.setSocialProgram(SocialProgram.findById(rs.getInt("social_program_id")));
+                    sp.setStatus(rs.getBoolean("status"));
+                    result.add(sp);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return result;
+    }
+
 }

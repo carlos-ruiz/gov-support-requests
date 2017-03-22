@@ -21,7 +21,7 @@ public class MainView extends JFrame {
         setSize(900, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
-
+        setName("Frame principal");
         JLabel title = new JLabel("H. AYUNTAMIENTO DE HUANIQUEO 2015 - 2018");
         title.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

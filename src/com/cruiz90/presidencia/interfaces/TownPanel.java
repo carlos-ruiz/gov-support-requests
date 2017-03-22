@@ -11,12 +11,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author ISC. Carlos Alfredo Ruiz Calderon <car.ruiz90@gmail.com>
  */
-public class TownPanel extends javax.swing.JPanel implements ActionListener {
+public class TownPanel extends JPanel implements ActionListener {
 
     private List<JButton> townsButtonList;
 
@@ -61,5 +64,13 @@ public class TownPanel extends javax.swing.JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JPanel programs = new SocialProgramsPanel(e.getActionCommand());
+        programs.setBounds(10, 120, 870, 400);
+        parentFrame.add(programs);
+        parentFrame.remove(this);
+        System.out.println(parentFrame.getName());
+        parentFrame.revalidate();
+        parentFrame.repaint();
     }
 }
