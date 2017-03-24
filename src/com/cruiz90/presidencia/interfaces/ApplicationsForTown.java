@@ -149,7 +149,6 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
     }
 
     private void back() {
-        System.out.println("Hoila");
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         JPanel programs = new SocialProgramsPanel(townId.toString());
         programs.setBounds(10, 120, 870, 400);
