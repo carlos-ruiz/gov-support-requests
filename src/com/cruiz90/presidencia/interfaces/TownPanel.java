@@ -56,20 +56,17 @@ public class TownPanel extends JPanel implements ActionListener {
             button.setActionCommand(town.getTownId().toString());
             townsButtonList.add(button);
             button.addActionListener(this);
-            System.out.println("Text: " + button.getText() + " Id: " + button.getActionCommand());
             add(button, 0, 0);
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         JPanel programs = new SocialProgramsPanel(e.getActionCommand());
         programs.setBounds(10, 120, 870, 400);
         parentFrame.add(programs);
         parentFrame.remove(this);
-        System.out.println(parentFrame.getName());
         parentFrame.revalidate();
         parentFrame.repaint();
     }

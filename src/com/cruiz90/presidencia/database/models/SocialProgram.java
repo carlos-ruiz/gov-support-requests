@@ -130,7 +130,7 @@ public class SocialProgram {
         if (conn != null) {
             PreparedStatement ps = null;
             try {
-                String query = "SELECT * FROM socail_programs WHERE social_program_id=?";
+                String query = "SELECT * FROM social_programs WHERE social_program_id=?";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();

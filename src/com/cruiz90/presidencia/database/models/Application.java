@@ -26,7 +26,7 @@ public class Application {
     private Date date;
     private Town town;
     private SocialProgram socialProgram;
-    private boolean status; // false - Pendiente, true - Completa
+    private boolean completed; // false - Pendiente, true - Completa
 
     public Application() {
     }
@@ -39,7 +39,7 @@ public class Application {
         this.date = date;
         this.town = town;
         this.socialProgram = socialProgram;
-        this.status = false;
+        this.completed = false;
     }
 
     public Integer getApplicatinId() {
@@ -106,12 +106,12 @@ public class Application {
         this.socialProgram = socialProgram;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public void save() {
@@ -130,7 +130,7 @@ public class Application {
                 ps.setDate(5, date);
                 ps.setInt(6, town.getTownId());
                 ps.setInt(7, socialProgram.getSocialProgramId());
-                ps.setBoolean(8, status);
+                ps.setBoolean(8, completed);
                 ps.execute();
             } catch (SQLException ex) {
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,9 +154,45 @@ public class Application {
         if (conn != null) {
             PreparedStatement ps = null;
             try {
-                String query = "DELETE FROM applications WHERE applications_id=?";
+                String query = "DELETE FROM applications WHERE application_id=?";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, applicatinId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public void update() {
+        Connection conn = new Util().getDatabaseConnection();
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "UPDATE applications SET"
+                        + " product = ?, quantity = ?, beneficiary = ?, description = ?, date = ?, town_id = ?, social_program_id = ?, status = ?"
+                        + " WHERE application_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, product);
+                ps.setInt(2, quantity);
+                ps.setString(3, beneficiary);
+                ps.setString(4, description);
+                ps.setDate(5, date);
+                ps.setInt(6, town.getTownId());
+                ps.setInt(7, socialProgram.getSocialProgramId());
+                ps.setBoolean(8, completed);
+                ps.setInt(9, applicatinId);
                 ps.execute();
             } catch (SQLException ex) {
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,13 +225,13 @@ public class Application {
                     Application sp = new Application();
                     sp.setApplicatinId(rs.getInt("application_id"));
                     sp.setProduct(rs.getString("product"));
-                    sp.setApplicatinId(rs.getInt("quantity"));
+                    sp.setQuantity(rs.getInt("quantity"));
                     sp.setBeneficiary(rs.getString("beneficiary"));
                     sp.setDescription(rs.getString("description"));
                     sp.setDate(rs.getDate("date"));
                     sp.setTown(Town.findById(rs.getInt("town_id")));
                     sp.setSocialProgram(SocialProgram.findById(rs.getInt("social_program_id")));
-                    sp.setStatus(rs.getBoolean("status"));
+                    sp.setCompleted(rs.getBoolean("status"));
                     result.add(sp);
                 }
             } catch (SQLException ex) {
@@ -224,21 +260,21 @@ public class Application {
             try {
                 String query = "SELECT * FROM applications WHERE town_id=? AND social_program_id=?";
                 ps = conn.prepareStatement(query);
-                ps.setInt(townId, 1);
-                ps.setInt(socialProgramId, 2);
+                ps.setInt(1, townId);
+                ps.setInt(2, socialProgramId);
                 ResultSet rs = ps.executeQuery();
                 result = new ArrayList<>();
                 while (rs.next()) {
                     Application sp = new Application();
                     sp.setApplicatinId(rs.getInt("application_id"));
                     sp.setProduct(rs.getString("product"));
-                    sp.setApplicatinId(rs.getInt("quantity"));
+                    sp.setQuantity(rs.getInt("quantity"));
                     sp.setBeneficiary(rs.getString("beneficiary"));
                     sp.setDescription(rs.getString("description"));
                     sp.setDate(rs.getDate("date"));
                     sp.setTown(Town.findById(rs.getInt("town_id")));
                     sp.setSocialProgram(SocialProgram.findById(rs.getInt("social_program_id")));
-                    sp.setStatus(rs.getBoolean("status"));
+                    sp.setCompleted(rs.getBoolean("status"));
                     result.add(sp);
                 }
             } catch (SQLException ex) {
@@ -257,6 +293,46 @@ public class Application {
             }
         }
         return result;
+    }
+
+    public static Application findById(Integer id) {
+        Connection conn = new Util().getDatabaseConnection();
+        Application app = null;
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "SELECT * FROM applications WHERE application_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    app = new Application();
+                    app.setApplicatinId(rs.getInt("application_id"));
+                    app.setProduct(rs.getString("product"));
+                    app.setQuantity(rs.getInt("quantity"));
+                    app.setBeneficiary(rs.getString("beneficiary"));
+                    app.setDescription(rs.getString("description"));
+                    app.setDate(rs.getDate("date"));
+                    app.setTown(Town.findById(rs.getInt("town_id")));
+                    app.setSocialProgram(SocialProgram.findById(rs.getInt("social_program_id")));
+                    app.setCompleted(rs.getBoolean("status"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return app;
     }
 
 }
