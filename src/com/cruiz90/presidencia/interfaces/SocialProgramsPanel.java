@@ -42,6 +42,14 @@ public class SocialProgramsPanel extends JPanel implements ActionListener {
         back.addActionListener(backListener());
         add(back);
 
+        JButton manager = new JButton();
+        manager.setBounds(70, 30, 50, 50);
+        imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/com/cruiz90/presidencia/images/list.png")).getImage().getScaledInstance(manager.getWidth(), manager.getHeight(), Image.SCALE_SMOOTH));
+        manager.setIcon(imageIcon);
+        manager.setToolTipText("Administrar programas sociales");
+        manager.addActionListener(managerListener());
+        add(manager);
+
         JPanel socialProgramsGrid = new JPanel();
         socialProgramsGrid.setLayout(new GridLayout(4, 5, 3, 3));
 
@@ -59,13 +67,7 @@ public class SocialProgramsPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JPanel applications = new ApplicationsForTown(townId, e.getActionCommand());
-        applications.setBounds(10, 120, 870, 400);
-        parentFrame.add(applications);
-        parentFrame.remove(this);
-        parentFrame.revalidate();
-        parentFrame.repaint();
+        changeContentPanel(new ApplicationsForTown(townId, e.getActionCommand()));
     }
 
     private ActionListener backListener() {
@@ -73,16 +75,25 @@ public class SocialProgramsPanel extends JPanel implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                back();
+                changeContentPanel(new TownPanel());
             }
         };
     }
 
-    private void back() {
+    private ActionListener managerListener() {
+        return new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeContentPanel(new SocialProgramsManager(townId));
+            }
+        };
+    }
+
+    private void changeContentPanel(JPanel panel) {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JPanel towns = new TownPanel();
-        towns.setBounds(10, 120, 870, 400);
-        parentFrame.add(towns);
+        panel.setBounds(10, 120, 870, 400);
+        parentFrame.add(panel);
         parentFrame.remove(this);
         parentFrame.revalidate();
         parentFrame.repaint();

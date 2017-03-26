@@ -20,6 +20,9 @@ public class SocialProgram {
     private Integer socialProgramId;
     private String name;
 
+    public SocialProgram() {
+    }
+
     public SocialProgram(Integer socialProgramId, String name) {
         this.socialProgramId = socialProgramId;
         this.name = name;
@@ -75,6 +78,35 @@ public class SocialProgram {
                 String query = "DELETE FROM social_programs WHERE social_program_id=?";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, socialProgramId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public void update() {
+        Connection conn = new Util().getDatabaseConnection();
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "UPDATE social_programs SET"
+                        + " name = ?"
+                        + " WHERE social_program_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setInt(2, socialProgramId);
                 ps.execute();
             } catch (SQLException ex) {
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
