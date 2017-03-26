@@ -113,9 +113,11 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent evnt) {
                 if (evnt.getClickCount() == 1) {
-                    ChooseActionForApplication dialog = new ChooseActionForApplication(parentFrame, true, (Integer) applicationTable.getValueAt(applicationTable.getSelectedRow(), 0));
-                    dialog.setUpDataContainer(dataContainer);
-                    dialog.setVisible(true);
+                    if (applicationTable.getSelectedRow() > -1) {
+                        ChooseActionForApplication dialog = new ChooseActionForApplication(parentFrame, true, (Integer) applicationTable.getValueAt(applicationTable.getSelectedRow(), 0));
+                        dialog.setUpDataContainer(dataContainer);
+                        dialog.setVisible(true);
+                    }
                 }
             }
         });

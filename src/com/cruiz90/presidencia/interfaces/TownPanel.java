@@ -6,14 +6,19 @@
 package com.cruiz90.presidencia.interfaces;
 
 import com.cruiz90.presidencia.database.models.Town;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
 
 /**
  *
@@ -43,12 +48,23 @@ public class TownPanel extends JPanel implements ActionListener {
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Comunidades", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 0, 14))); // NOI18N
         setPreferredSize(new java.awt.Dimension(800, 500));
         setRequestFocusEnabled(false);
-        setLayout(new java.awt.GridLayout(4, 5, 3, 3));
+        setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
     private void setupScreen() {
+        JButton manager = new JButton();
+        manager.setBounds(10, 30, 50, 50);
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/com/cruiz90/presidencia/images/list.png")).getImage().getScaledInstance(manager.getWidth(), manager.getHeight(), Image.SCALE_SMOOTH));
+        manager.setIcon(imageIcon);
+        manager.setToolTipText("Administrar comunidades");
+        manager.addActionListener(managerListener());
+        add(manager);
+
+        JPanel townssGrid = new JPanel();
+        townssGrid.setLayout(new GridLayout(4, 5, 3, 3));
+
         List<Town> towns = Town.getAll();
         townsButtonList = new ArrayList<>();
         for (Town town : towns) {
@@ -56,8 +72,11 @@ public class TownPanel extends JPanel implements ActionListener {
             button.setActionCommand(town.getTownId().toString());
             townsButtonList.add(button);
             button.addActionListener(this);
-            add(button, 0, 0);
+            townssGrid.add(button, 0, 0);
         }
+        townssGrid.setBounds(10, 100, 850, 290);
+        townssGrid.setBorder(BorderFactory.createSoftBevelBorder(BevelBorder.RAISED));
+        add(townssGrid);
     }
 
     @Override
@@ -66,6 +85,25 @@ public class TownPanel extends JPanel implements ActionListener {
         JPanel programs = new SocialProgramsPanel(e.getActionCommand());
         programs.setBounds(10, 120, 870, 400);
         parentFrame.add(programs);
+        parentFrame.remove(this);
+        parentFrame.revalidate();
+        parentFrame.repaint();
+    }
+
+    private ActionListener managerListener() {
+        return new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeContentPanel(new TownsManager());
+            }
+        };
+    }
+
+    private void changeContentPanel(JPanel panel) {
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        panel.setBounds(10, 120, 870, 400);
+        parentFrame.add(panel);
         parentFrame.remove(this);
         parentFrame.revalidate();
         parentFrame.repaint();

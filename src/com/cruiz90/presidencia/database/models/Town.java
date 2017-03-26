@@ -20,6 +20,9 @@ public class Town {
     private Integer townId;
     private String name;
 
+    public Town() {
+    }
+
     public Town(Integer townId, String name) {
         this.townId = townId;
         this.name = name;
@@ -79,6 +82,35 @@ public class Town {
                 String query = "DELETE FROM towns WHERE town_id=?";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, townId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public void update() {
+        Connection conn = new Util().getDatabaseConnection();
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "UPDATE towns SET"
+                        + " name = ?"
+                        + " WHERE town_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setInt(2, townId);
                 ps.execute();
             } catch (SQLException ex) {
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);

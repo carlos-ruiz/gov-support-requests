@@ -5,11 +5,12 @@
         <group>
             <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/ApplicationsForTown.java</file>
             <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/TownPanel.java</file>
+            <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/SocialProgramsManager.java</file>
             <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/database/models/Application.java</file>
             <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/SocialProgramsPanel.java</file>
             <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/ApplicationForm.java</file>
-            <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/Main.java</file>
-            <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/ChooseActionForApplication.java</file>
+            <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/interfaces/SocialProgramNew.java</file>
+            <file>file:/C:/Users/Carlos/Documents/NetBeansProjects/Control%20de%20solicitudes/src/com/cruiz90/presidencia/database/models/SocialProgram.java</file>
         </group>
     </open-files>
 </project-private>

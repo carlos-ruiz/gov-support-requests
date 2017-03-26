@@ -1,6 +1,6 @@
 package com.cruiz90.presidencia.interfaces;
 
-import com.cruiz90.presidencia.database.models.SocialProgram;
+import com.cruiz90.presidencia.database.models.Town;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,34 +13,34 @@ import javax.swing.JTextField;
  *
  * @author ISC. Carlos Alfredo Ruiz Calderon <car.ruiz90@gmail.com>
  */
-public class SocialProgramNew extends JDialog implements ActionListener {
+public class TownForm extends JDialog implements ActionListener {
 
-    private SocialProgramsManager dataContainer;
+    private Town town;
+    private TownsManager dataContainer;
     private JTextField name;
-    private SocialProgram sp;
     private boolean isNew;
 
-    public SocialProgramNew(Frame owner, boolean modal) {
+    public TownForm(Frame owner, boolean modal) {
         super(owner, modal);
         initComponents();
     }
 
-    public SocialProgramNew(Frame owner, boolean modal, SocialProgram sp) {
+    public TownForm(Frame owner, boolean modal, Town town) {
         super(owner, modal);
-        this.sp = sp;
+        this.town = town;
         initComponents();
     }
 
     private void initComponents() {
         setTitle("Nuevo Programa Social");
         setSize(350, 150);
-        if (sp == null) {
-            sp = new SocialProgram();
+        if (town == null) {
+            town = new Town();
             isNew = true;
         }
 
         JLabel nameLabel = new JLabel("Nombre del programa");
-        name = new JTextField(sp.getName());
+        name = new JTextField(town.getName());
         JButton save = new JButton("Guardar");
         save.addActionListener(this);
 
@@ -53,20 +53,21 @@ public class SocialProgramNew extends JDialog implements ActionListener {
         add(save);
     }
 
-    public void setDataContainer(SocialProgramsManager dataContainer) {
+    public void setDataContainer(TownsManager dataContainer) {
         this.dataContainer = dataContainer;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        sp.setName(name.getText());
+        town.setName(name.getText());
         if (isNew) {
-            sp.save();
+            town.save();
         } else {
-            System.out.println("Id: " + sp.getSocialProgramId());
-            sp.update();
+            System.out.println("Id: " + town.getTownId());
+            town.update();
         }
         dataContainer.updateView();
         dispose();
     }
+
 }

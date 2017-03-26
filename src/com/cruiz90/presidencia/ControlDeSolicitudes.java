@@ -1,6 +1,6 @@
 package com.cruiz90.presidencia;
 
-import com.cruiz90.presidencia.interfaces.MainView;
+import com.cruiz90.presidencia.interfaces.Login;
 
 /**
  *
@@ -25,8 +25,10 @@ public class ControlDeSolicitudes {
 //            SocialProgram p = new SocialProgram(sp);
 //            p.save();
 //        }
-        MainView main = new MainView();
-        main.setVisible(true);
+//        MainView main = new MainView();
+//        main.setVisible(true);
+        Login login = new Login();
+        login.setVisible(true);
     }
 
 }
