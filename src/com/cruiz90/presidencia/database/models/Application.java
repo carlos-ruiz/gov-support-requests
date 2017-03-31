@@ -295,6 +295,62 @@ public class Application {
         return result;
     }
 
+    public static List<Application> deleteByTown(Integer townId) {
+        Connection conn = new Util().getDatabaseConnection();
+        List<Application> result = null;
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "DELETE FROM applications WHERE town_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, townId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<Application> deleteBySocialProgram(Integer socialProgramId) {
+        Connection conn = new Util().getDatabaseConnection();
+        List<Application> result = null;
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "DELETE FROM applications WHERE social_program_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, socialProgramId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return result;
+    }
+
     public static Application findById(Integer id) {
         Connection conn = new Util().getDatabaseConnection();
         Application app = null;

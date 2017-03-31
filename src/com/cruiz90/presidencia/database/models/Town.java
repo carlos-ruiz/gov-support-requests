@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -84,7 +85,15 @@ public class Town {
                 ps.setInt(1, townId);
                 ps.execute();
             } catch (SQLException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                if (ex.getErrorCode() == 1451) {
+                    int response = JOptionPane.showConfirmDialog(null, "Al eliminar la comunidad se eliminaran todas las solicitudes relacionadas, ¿Desea continuar?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        Application.deleteByTown(townId);
+                        delete();
+                    }
+                } else {
+                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } finally {
                 if (ps != null) {
                     try {

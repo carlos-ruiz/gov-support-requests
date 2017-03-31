@@ -24,6 +24,10 @@ public class User {
     private String userName;
     private String password;
 
+    public User() {
+
+    }
+
     public User(Integer userId, String name, String userName, String password) {
         this.userId = userId;
         this.name = name;
@@ -61,6 +65,10 @@ public class User {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = encryptPassword(password);
+    }
+
     private String encryptPassword(String password) {
         MessageDigest md;
         try {
@@ -78,6 +86,10 @@ public class User {
             sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
+    }
+
+    public boolean comparePassword(String passwordToCheck) {
+        return password.equals(encryptPassword(passwordToCheck));
     }
 
     public void save() {
@@ -134,7 +146,38 @@ public class User {
         }
     }
 
-    public static List<User> getAllUsers() {
+    public void update() {
+        Connection conn = new Util().getDatabaseConnection();
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "UPDATE users SET"
+                        + " name = ?, userName=?, password=?"
+                        + " WHERE user_id=?";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setString(2, userName);
+                ps.setString(3, password);
+                ps.setInt(4, userId);
+                ps.execute();
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public static List<User> getAll() {
         Connection conn = new Util().getDatabaseConnection();
         List<User> result = null;
         if (conn != null) {
@@ -163,5 +206,36 @@ public class User {
             }
         }
         return result;
+    }
+
+    public static User findByUserName(String userName) {
+        Connection conn = new Util().getDatabaseConnection();
+        User user = null;
+        if (conn != null) {
+            PreparedStatement ps = null;
+            try {
+                String query = "SELECT * FROM users WHERE username=?";
+                ps = conn.prepareStatement(query);
+                ps.setString(1, userName);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("username"), rs.getString("password"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return user;
     }
 }

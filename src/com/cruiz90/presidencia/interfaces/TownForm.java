@@ -32,7 +32,7 @@ public class TownForm extends JDialog implements ActionListener {
     }
 
     private void initComponents() {
-        setTitle("Nuevo Programa Social");
+        setTitle("Nueva comunidad");
         setSize(350, 150);
         if (town == null) {
             town = new Town();
@@ -63,7 +63,6 @@ public class TownForm extends JDialog implements ActionListener {
         if (isNew) {
             town.save();
         } else {
-            System.out.println("Id: " + town.getTownId());
             town.update();
         }
         dataContainer.updateView();

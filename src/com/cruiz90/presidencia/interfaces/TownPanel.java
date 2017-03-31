@@ -62,6 +62,14 @@ public class TownPanel extends JPanel implements ActionListener {
         manager.addActionListener(managerListener());
         add(manager);
 
+        JButton usersManager = new JButton();
+        usersManager.setBounds(70, 30, 50, 50);
+        imageIcon = new ImageIcon(new ImageIcon(getClass().getResource("/com/cruiz90/presidencia/images/users.png")).getImage().getScaledInstance(usersManager.getWidth(), usersManager.getHeight(), Image.SCALE_SMOOTH));
+        usersManager.setIcon(imageIcon);
+        usersManager.setToolTipText("Administrar usuarios");
+        usersManager.addActionListener(usersManagerListener());
+        add(usersManager);
+
         JPanel townssGrid = new JPanel();
         townssGrid.setLayout(new GridLayout(4, 5, 3, 3));
 
@@ -96,6 +104,16 @@ public class TownPanel extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changeContentPanel(new TownsManager());
+            }
+        };
+    }
+
+    private ActionListener usersManagerListener() {
+        return new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeContentPanel(new UsersManager());
             }
         };
     }

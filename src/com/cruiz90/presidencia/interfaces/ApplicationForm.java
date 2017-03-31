@@ -60,6 +60,8 @@ public class ApplicationForm extends JDialog implements ActionListener {
         description = new JTextArea();
         date = new JFormattedTextField();
         date.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter()));
+        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+        date.setText(formater.format(new java.util.Date()));
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
