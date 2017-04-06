@@ -109,7 +109,9 @@ public class UserForm extends JDialog implements ActionListener {
             user.setPassword(pass);
             user.update();
         }
-        dataContainer.updateView();
+        if (dataContainer != null) {
+            dataContainer.updateView();
+        }
         dispose();
     }
 
