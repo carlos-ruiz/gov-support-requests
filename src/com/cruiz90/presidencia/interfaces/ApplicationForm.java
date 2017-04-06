@@ -142,11 +142,12 @@ public class ApplicationForm extends JDialog implements ActionListener {
             JOptionPane.showMessageDialog(dataContainer, errors, "Error de validación", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date dateObj;
         try {
             dateObj = formater.parse(date.getJFormattedTextField().getText());
         } catch (ParseException ex) {
+            ex.printStackTrace();
             dateObj = new java.util.Date();
         }
         Application app = new Application(product.getText(), Integer.parseInt(quantity.getText()), beneficiary.getText(), description.getText(), new Date(dateObj.getTime()), Town.findById(townId), SocialProgram.findById(socialProgramId));

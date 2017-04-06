@@ -46,7 +46,6 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
         this.dataContainer = this;
         parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         setBorder(BorderFactory.createTitledBorder(null, "Solicitudes de apoyo", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Comic Sans MS", 0, 14))); // NOI18N
-        setName("applicationsPanel");
         setRequestFocusEnabled(false);
         setLayout(null);
 
