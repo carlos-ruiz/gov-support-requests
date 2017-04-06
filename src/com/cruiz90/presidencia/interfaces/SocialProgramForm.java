@@ -1,7 +1,10 @@
 package com.cruiz90.presidencia.interfaces;
 
 import com.cruiz90.presidencia.database.models.SocialProgram;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -45,6 +48,13 @@ public class SocialProgramForm extends JDialog implements ActionListener {
         save.addActionListener(this);
 
         setLayout(null);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        //height of the task bar
+        Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+        int taskBarSize = scnMax.bottom;
+        //available size of the screen
+        setLocation((screenSize.width - getWidth()) / 2, (screenSize.height - taskBarSize - getHeight()) / 2);
         nameLabel.setBounds(10, 10, 150, 30);
         add(nameLabel);
         name.setBounds(170, 10, 150, 30);

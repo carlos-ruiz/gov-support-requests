@@ -3,21 +3,33 @@ package com.cruiz90.presidencia.interfaces;
 import com.cruiz90.presidencia.database.models.Application;
 import com.cruiz90.presidencia.database.models.SocialProgram;
 import com.cruiz90.presidencia.database.models.Town;
+import com.cruiz90.presidencia.utils.DateLabelFormatter;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -26,9 +38,10 @@ import javax.swing.text.DefaultFormatterFactory;
 public class ApplicationForm extends JDialog implements ActionListener {
 
     private JLabel productLabel, quantityLabel, descriptionLabel, beneficiaryLabel, dateLabel;
-    private JTextField product, quantity, beneficiary;
+    private JTextField product, beneficiary;
+    private JDatePickerImpl date;
+    private JFormattedTextField quantity;
     private JTextArea description;
-    private JFormattedTextField date;
     private Integer townId, socialProgramId;
     private ApplicationsForTown dataContainer;
 
@@ -47,7 +60,13 @@ public class ApplicationForm extends JDialog implements ActionListener {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(null);
         setTitle("Agregar solicitud");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+        //height of the task bar
+        Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+        int taskBarSize = scnMax.bottom;
+        //available size of the screen
+        setLocation((screenSize.width - getWidth()) / 2, (screenSize.height - taskBarSize - getHeight()) / 2);
         productLabel = new JLabel("Producto");
         quantityLabel = new JLabel("Cantidad");
         descriptionLabel = new JLabel("Descripción");
@@ -55,13 +74,29 @@ public class ApplicationForm extends JDialog implements ActionListener {
         dateLabel = new JLabel("Fecha");
 
         product = new JTextField();
-        quantity = new JTextField();
+        NumberFormat amountFormat = NumberFormat.getNumberInstance();
+        quantity = new JFormattedTextField(amountFormat);
         beneficiary = new JTextField();
         description = new JTextArea();
-        date = new JFormattedTextField();
-        date.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter()));
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-        date.setText(formater.format(new java.util.Date()));
+        java.util.Date now = new java.util.Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        Properties p = new Properties();
+        InputStream fileProperties;
+        try {
+            fileProperties = new FileInputStream("src/com/cruiz90/presidencia/properties/Messages.properties");
+            p.load(fileProperties);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        UtilDateModel modelFrom = new UtilDateModel();
+        modelFrom.setDate(year, month, day);
+        modelFrom.setSelected(true);
+        JDatePanelImpl datePanelFrom = new JDatePanelImpl(modelFrom, p);
+        date = new JDatePickerImpl(datePanelFrom, new DateLabelFormatter());
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -102,10 +137,15 @@ public class ApplicationForm extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String errors = validateFields();
+        if (!errors.isEmpty()) {
+            JOptionPane.showMessageDialog(dataContainer, errors, "Error de validación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
         java.util.Date dateObj;
         try {
-            dateObj = formater.parse(date.getText());
+            dateObj = formater.parse(date.getJFormattedTextField().getText());
         } catch (ParseException ex) {
             dateObj = new java.util.Date();
         }
@@ -118,5 +158,19 @@ public class ApplicationForm extends JDialog implements ActionListener {
 
     public ApplicationForm(Frame owner, boolean modal) {
         super(owner, modal);
+    }
+
+    private String validateFields() {
+        String errors = "";
+        if (product.getText().isEmpty()) {
+            errors += "El campo producto es obligatorio\n";
+        }
+        if (quantity.getText().isEmpty()) {
+            errors += "El campo cantidad es obligatorio\n";
+        }
+        if (beneficiary.getText().isEmpty()) {
+            errors += "El campo beneficiario es obligatorio\n";
+        }
+        return errors;
     }
 }

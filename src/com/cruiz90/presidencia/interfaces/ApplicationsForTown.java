@@ -34,6 +34,7 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
     private JTable applicationTable;
     private JFrame parentFrame;
     private ApplicationsForTown dataContainer;
+    private int hashCodeMouseEvent;
 
     public ApplicationsForTown(String townId, String socialProgramId) {
         this.townId = Integer.parseInt(townId);
@@ -81,26 +82,27 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
 
     public void updateData() {
         List<Application> applications = Application.findByTownAndSocialProgram(townId, socialProgramId);
-        Object[][] applicationsArray = new Object[applications.size()][6];
+        Object[][] applicationsArray = new Object[applications.size()][7];
         int row = 0;
         for (Application app : applications) {
             applicationsArray[row][0] = app.getApplicatinId();
             applicationsArray[row][1] = app.getProduct();
             applicationsArray[row][2] = app.getQuantity();
-            applicationsArray[row][3] = app.getBeneficiary();
-            applicationsArray[row][4] = app.getDate().toString();
-            applicationsArray[row][5] = app.isCompleted() ? "Completada" : "Pendiente";
+            applicationsArray[row][3] = app.getDescription();
+            applicationsArray[row][4] = app.getBeneficiary();
+            applicationsArray[row][5] = app.getDate().toString();
+            applicationsArray[row][6] = app.isCompleted() ? "Completada" : "Pendiente";
             row++;
         }
 
         tableModel = new DefaultTableModel(
                 applicationsArray,
                 new String[]{
-                    "Número", "Producto", "Cantidad", "Beneficiario", "Fecha", "Estatus"
+                    "Número", "Producto", "Cantidad", "Descripción", "Beneficiario", "Fecha", "Estatus"
                 }
         ) {
             Class[] types = new Class[]{
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             @Override
@@ -113,7 +115,8 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent evnt) {
                 if (evnt.getClickCount() == 1) {
-                    if (applicationTable.getSelectedRow() > -1) {
+                    if (applicationTable.getSelectedRow() > -1 && evnt.hashCode() != hashCodeMouseEvent) {
+                        hashCodeMouseEvent = evnt.hashCode();
                         ChooseActionForApplication dialog = new ChooseActionForApplication(parentFrame, true, (Integer) applicationTable.getValueAt(applicationTable.getSelectedRow(), 0));
                         dialog.setUpDataContainer(dataContainer);
                         dialog.setVisible(true);
@@ -128,7 +131,7 @@ public class ApplicationsForTown extends JPanel implements ActionListener {
 
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
-                String status = (String) table.getModel().getValueAt(row, 5);
+                String status = (String) table.getModel().getValueAt(row, 6);
                 if ("Completada".equals(status)) {
                     setBackground(Color.YELLOW);
                 } else {

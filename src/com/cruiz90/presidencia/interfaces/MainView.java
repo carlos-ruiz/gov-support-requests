@@ -1,6 +1,9 @@
 package com.cruiz90.presidencia.interfaces;
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +24,13 @@ public class MainView extends JFrame {
         setSize(900, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        //height of the task bar
+        Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+        int taskBarSize = scnMax.bottom;
+        //available size of the screen
+        setLocation((screenSize.width - getWidth()) / 2, (screenSize.height - taskBarSize - getHeight()) / 2);
         setName("Frame principal");
         JLabel title = new JLabel("H. AYUNTAMIENTO DE HUANIQUEO 2015 - 2018");
         title.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
