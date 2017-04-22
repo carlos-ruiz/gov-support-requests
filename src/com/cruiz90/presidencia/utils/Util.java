@@ -22,6 +22,7 @@ public class Util {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Connection Failed! Check output console");
             JOptionPane.showMessageDialog(null, "Error de conexión a la base de datos\nAsegurate de tener corriendo el programa XAMPP", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         return connection;
     }
